@@ -3,6 +3,8 @@ import java.util.Scanner;
 
 public class Denomination {
 
+	int amount;
+
 	public static void sort(int [] array) {
 		int len = array.length;
 		while (len > 0) {
@@ -14,12 +16,12 @@ public class Denomination {
 		}
 	}
 	
-	public static int[] denoms(int [] array, int amount) {
+	static int[] denoms(int [] array, Denomination obj) {
 		int [] vals = new int [array.length];
 		for (int i = 0; i < array.length; i++) {
-			if (amount >= array[i]) {
-				vals[i] = amount / array[i];
-				amount -= vals[i] * array[i];
+			if (obj.amount >= array[i]) {
+				vals[i] = obj.amount / array[i];
+				obj.amount -= vals[i] * array[i];
 			}
 		}
 		return vals;
@@ -30,11 +32,16 @@ public class Denomination {
 		array[i] = array[j];
 		array[j] = temp;
 	}
-	
 	public static void main(String[] args) {
+		Denomination obj = new Denomination();
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter the size of currency denominations: ");
 		int num = sc.nextInt();
+		
+		while (num == 0) {
+			System.out.println("This payment can't happen, enter again: ");
+			num = sc.nextInt();
+		}
 		
 		System.out.println("Enter the currency denominations value ");
 		int [] arr = new int[num];
@@ -45,18 +52,18 @@ public class Denomination {
 		sort(arr);
 		
 		System.out.println("Enter the amount you want to pay: ");
-		int amount = sc.nextInt();
+		obj.amount = sc.nextInt();
 		sc.close();
 		System.out.print("\n");
 		
-		int [] values = denoms(arr, amount);
-		if (amount != 0) {
-			System.out.println("This amount can't be paid in the given denomination.");
-		}
-		else {
+		int [] values = denoms(arr, obj);
+		if (obj.amount == 0) {
 			System.out.println("Your payment approach in order to give min no of notes will be: ");
 			for (int i = 0; i < num; i++)
 				System.out.println(arr[i] + " : " + values[i]);
+		}
+		else {
+			System.out.println("This amount can't be paid in the given denomination.");
 		}
 	}
 }
